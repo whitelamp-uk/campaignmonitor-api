@@ -1,9 +1,11 @@
 <?php
 
-namespace Whitelamp;
+namespace Blotto;
 
-require CAMPAIGNMONITOR_CREATESEND_CLASS;
+
 require __DIR__.'/config.php';
+require CAMPAIGNMONITOR_CREATESEND_CLASS;
+
 
 class CampaignMonitor {
 
