@@ -1,2 +1,2 @@
-# createsend-api
-API class for Campaign Monitor
+# campaignmonitor-api
+API class for Create-Send's Campaign Monitor
