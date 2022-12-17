@@ -8,7 +8,7 @@ define ( 'BLOTTO_EMAIL_API_CAMPAIGNMONITOR',        '/opt/createsend-php/csrest_
 define ( 'BLOTTO_EMAIL_API_CAMPAIGNMONITOR_CLASS',  '\Blotto\CampaignMonitor'                                   );
 
 // Use of blotto2 functions
-require '/opt/blotto2/scripts/functions.php';
+require '/opt/crucible/blotto2/scripts/functions.php';
 $api = class_api_instance ('EMAIL');
 
 print_r ($api);
