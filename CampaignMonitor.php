@@ -1,6 +1,6 @@
 <?php
 
-namespace Blotto;
+namespace Whitelamp;
 
 
 require __DIR__.'/config.php';
