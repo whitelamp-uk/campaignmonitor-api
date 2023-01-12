@@ -1,15 +1,22 @@
 <?php
 
-namespace Whitelamp;
+namespace Blotto;
 
 
 require __DIR__.'/config.php';
-require CAMPAIGNMONITOR_CREATESEND_CLASS;
+require CAMPAIGN_MONITOR;
 
 
 class CampaignMonitor {
 
+    private $key;
+    public  $errorLast;
+
     public function __construct ( ) {
+    }
+
+    public function keySet ($key) {
+        $this->key = $key;
     }
 
     public function received ($ref) {
@@ -25,23 +32,31 @@ class CampaignMonitor {
         return true;
     }
 
-    public static function send ($key,$campaign_id,$to,$data) {
-        // Lifted from blotto2 function campaign_monitor() as the time this class was first defined
+    public function send ($template_ref,$email_to,$data) {
+        // $data is a simple associative array [ template_var_name_1 => value_1, ... ]
         if (!class_exists('\CS_REST_Transactional_SmartEmail')) {
             throw new \Exception ('Class \CS_REST_Transactional_SmartEmail not found');
             return false;
         }
+        // In CM land, the template to be used is stored within the "campaign" and is referenced by its "Campaign ID"
+        $campaign_id = $template_ref;
+        $this->errorLast = null;
         $cm = new \CS_REST_Transactional_SmartEmail (
             $campaign_id,
-            ['api_key'=>$key]
+            ['api_key'=>$this->apiKey]
         );
-        return $cm->send (
+        $rtn =  $cm->send (
             [
-                "To"    => $to,
+                "To"    => $email_to,
                 "Data"  => $data
             ],
             'unchanged'
         );
+        if (in_array ($rtn->http_status_code,[200,201,202])) {
+            return $rtn->response[0]->MessageID;
+        }
+        $this->errorLast  = "CMID=$campaign_id Email=$email_to\ndata=".print_r($data,true)."return=".print_r($rtn,true);
+        return false;
     }
 
 }
