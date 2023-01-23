@@ -10,7 +10,7 @@ require CAMPAIGN_MONITOR;
 class CampaignMonitor {
 
     private $key;
-    public  $errorLast;
+    protected $errorLast;
 
     public function __construct ( ) {
     }
@@ -19,17 +19,17 @@ class CampaignMonitor {
         $this->key = $key;
     }
 
-    public function received ($ref) {
-        // How is this scoped?
-        // Just by a $ref?
-        // Or should we use a persistent "campaign" (as defined by CreateSend) instead?
-        // What will the return look like?
-        // A fake return could be temporarily used here to allow black-boxing for parallel development
-        $bounced = false;
-        if ($bounced) {
-            return false;
+    public function received ($template_ref,$message_ref) {
+    // Option 1 - message details for one message
+        $cm = new \CS_REST_Transactional_SmartEmail (
+            $template_ref,
+            ['api_key'=>$this->key]
+        );
+        $result = $cm->mark_gets_message_details ($message_ref);
+        if (property_exists($result,'response') && property_exists($result->response,'Status')) {
+            return ($result->response->Status!='Bounced');
         }
-        return true;
+        return false;
     }
 
     public function send ($template_ref,$email_to,$data) {
@@ -43,7 +43,7 @@ class CampaignMonitor {
         $this->errorLast = null;
         $cm = new \CS_REST_Transactional_SmartEmail (
             $campaign_id,
-            ['api_key'=>$this->apiKey]
+            ['api_key'=>$this->key]
         );
         $rtn =  $cm->send (
             [
