@@ -5,6 +5,7 @@ namespace Blotto;
 
 require __DIR__.'/config.php';
 require CAMPAIGN_MONITOR;
+require CAMPAIGN_MONITOR_TIMELINE;
 
 
 class CampaignMonitor {
@@ -20,7 +21,6 @@ class CampaignMonitor {
     }
 
     public function received ($template_ref,$message_ref) {
-    // Option 1 - message details for one message
         $cm = new \CS_REST_Transactional_SmartEmail (
             $template_ref,
             ['api_key'=>$this->key]
