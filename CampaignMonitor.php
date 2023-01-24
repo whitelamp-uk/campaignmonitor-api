@@ -21,22 +21,10 @@ class CampaignMonitor {
     }
 
     public function received ($template_ref,$message_ref) {
-
         $cm = new \CS_REST_Transactional_Timeline (
             ['api_key'=>$this->key]
         );
         $result = $cm->details ($message_ref,true);
-print_r($result);
-        if (property_exists($result,'response') && property_exists($result->response,'Status')) {
-            return ($result->response->Status!='Bounced');
-        }
-        return false;
-        
-        $cm = new \CS_REST_Transactional_SmartEmail (
-            $template_ref,
-            ['api_key'=>$this->key]
-        );
-        $result = $cm->mark_gets_message_details ($message_ref);
         if (property_exists($result,'response') && property_exists($result->response,'Status')) {
             return ($result->response->Status!='Bounced');
         }
