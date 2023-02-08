@@ -11,7 +11,7 @@ require CAMPAIGN_MONITOR_TIMELINE;
 class CampaignMonitor {
 
     private $key;
-    protected $errorLast;
+    public $errorLast;
 
     public function __construct ( ) {
     }
